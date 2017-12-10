@@ -1,0 +1,53 @@
+package ec.edu.epn.redes.cs.tcp;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.*;
+
+/**
+ * A TCP server that runs on port 9090.  When a client connects, it
+ * sends the client a message, then closes the
+ * connection with that client.  Arguably just about the simplest
+ * server you can write.
+ */
+public class ServerTCP {
+
+	private static int PORT = 9090;   // El puerto por donde se sealizara la conexion 
+	
+     /**
+     * Runs the server.
+     */
+    public static void main(String[] args) throws IOException {
+        
+    	ServerSocket serverSocket = new ServerSocket(PORT);    // Crea un objeto ServerSocket asignando el puerto para la conxion
+        System.out.println("Server listening on port "+PORT);  // Nos indica que el servidor esta listo para hacer conexion 
+        
+        try {
+            while (true) {
+                Socket socket = serverSocket.accept();    
+                try {
+                    PrintWriter out = new PrintWriter(socket.getOutputStream(), true);   // Nos permite realizar salidas al cliente 
+                    out.println("Message from Server DAVID");           // Envia el mensaje al cliente 
+                    	Scanner input = new Scanner(socket.getInputStream());    // Nos permite receptar los datos del cliente 
+                    
+                        int firstInt = input.nextInt();   // Declara y recibe le primer numero 
+                        int secondInt = input.nextInt();   // Declara y recibe le segundo numero 
+                        int answeer;     // Declara la variable donde se guardara la respuesta 
+                        
+                        answeer = firstInt + secondInt;    // realiza la suma de los dos numeros y la guarda en la variable answeer
+                        out.println(answeer);     // Envia el resultado al cliente 
+              
+                      
+                } finally {
+                    socket.close();   // cierra el socket 
+                }
+            }
+        }
+        finally {
+        	serverSocket.close();     // cierra   ServerSocket 
+        }
+    }
+	
+}
